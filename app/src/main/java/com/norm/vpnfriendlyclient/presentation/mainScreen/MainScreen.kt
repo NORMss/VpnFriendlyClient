@@ -16,7 +16,9 @@ import com.norm.vpnfriendlyclient.presentation.medium_padding
 import com.norm.vpnfriendlyclient.presentation.smale_padding
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+) {
+
     Box(
         modifier = Modifier
             .fillMaxSize()

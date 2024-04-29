@@ -13,6 +13,9 @@ import com.norm.vpnfriendlyclient.R
 import com.norm.vpnfriendlyclient.util.CHANNEL_ID
 import com.norm.vpnfriendlyclient.util.NOTIFICATION_ID
 import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.net.DatagramSocket
+import java.nio.ByteBuffer
 
 class NormVpnService : VpnService() {
 
@@ -92,7 +95,7 @@ class NormVpnService : VpnService() {
             try {
                 val builder = Builder()
                 vpnInterface = builder.setSession(getString(R.string.app_name))
-                    .addAddress("10.0.0.1", 24)
+                    .addAddress("10.0.0.2", 24)
                     .addDnsServer("8.8.8.8")
                     .addRoute("0.0.0.0", 0)
                     .setMtu(1500)
@@ -104,7 +107,19 @@ class NormVpnService : VpnService() {
                 val vpnOutput = FileInputStream(vpnInterface?.fileDescriptor)
 
                 while (true) {
+                    // Read data from the VPN interface
+                    val input = FileInputStream(vpnInterface?.fileDescriptor)
+                    val buffer = ByteBuffer.allocate(4096)
+                    val length = input.read(buffer.array())
+                    if (length > 0) {
+                        // Process the received data
 
+                        // Write data back to the VPN interface (echo)
+                        val output = FileOutputStream(vpnInterface?.fileDescriptor)
+                        output.write(buffer.array(), 0, length)
+                        output.close()
+                    }
+                    input.close()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -126,6 +141,12 @@ class NormVpnService : VpnService() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    override fun onRevoke() {
+        super.onRevoke()
+        DatagramSocket().close()
+        ParcelFileDescriptor(vpnInterface).close()
     }
 
     override fun onDestroy() {
