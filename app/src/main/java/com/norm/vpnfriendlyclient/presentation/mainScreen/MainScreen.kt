@@ -1,5 +1,6 @@
 package com.norm.vpnfriendlyclient.presentation.mainScreen
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,12 +13,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.norm.vpnfriendlyclient.data.AndroidNormVpnServiceController
 import com.norm.vpnfriendlyclient.presentation.medium_padding
 import com.norm.vpnfriendlyclient.presentation.smale_padding
 
 @Composable
 fun MainScreen(
+    context: Context,
 ) {
+    val vpnController = AndroidNormVpnServiceController(context)
 
     Box(
         modifier = Modifier
@@ -32,7 +36,7 @@ fun MainScreen(
         ) {
             Button(
                 onClick = {
-
+                    vpnController.startVpn()
                 }
             ) {
                 Text(
@@ -42,13 +46,16 @@ fun MainScreen(
             Spacer(modifier = Modifier.height(smale_padding))
             Button(
                 onClick = {
-
+                    vpnController.stopVpn()
                 }
             ) {
                 Text(
                     text = "Stop VPN"
                 )
             }
+            Text(
+                text = "VPN Status: ${vpnController.getStateRunningVpn()}"
+            )
         }
     }
 }

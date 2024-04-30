@@ -154,6 +154,10 @@ class NormVpnService : VpnService() {
         stopVpn()
     }
 
+    private fun sendStateVpnRunning() {
+
+    }
+
     companion object {
         var isVpnRunning = false
     }
