@@ -7,7 +7,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.net.VpnService
+import android.os.Binder
+import android.os.IBinder
 import android.os.ParcelFileDescriptor
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.norm.vpnfriendlyclient.R
 import com.norm.vpnfriendlyclient.util.CHANNEL_ID
@@ -18,6 +21,7 @@ import java.net.DatagramSocket
 import java.nio.ByteBuffer
 
 class NormVpnService : VpnService() {
+    private val binder by lazy { NormVpnBinder() }
 
     private var vpnThread: Thread? = null
     private var vpnInterface: ParcelFileDescriptor? = null
@@ -40,10 +44,7 @@ class NormVpnService : VpnService() {
                 }
             }
         }
-
-
-        startForeground(NOTIFICATION_ID, createNotification())
-        startVpn()
+        sendStateVpnRunning()
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -90,21 +91,11 @@ class NormVpnService : VpnService() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    private fun startVpn() {
+    fun startVpn() {
         vpnThread = Thread {
             try {
-                val builder = Builder()
-                vpnInterface = builder.setSession(getString(R.string.app_name))
-                    .addAddress("10.0.0.2", 24)
-                    .addDnsServer("8.8.8.8")
-                    .addRoute("0.0.0.0", 0)
-                    .setMtu(1500)
-                    .establish()
-
+                establishVpnConnection()
                 isVpnRunning = true
-
-                val vpnInput = FileInputStream(vpnInterface?.fileDescriptor)
-                val vpnOutput = FileInputStream(vpnInterface?.fileDescriptor)
 
                 while (true) {
                     // Read data from the VPN interface
@@ -128,18 +119,31 @@ class NormVpnService : VpnService() {
             }
         }
         vpnThread?.start()
+        Log.d("MyLog", "startVpn()")
+        sendStateVpnRunning()
+        startForeground(NOTIFICATION_ID, createNotification())
     }
 
-    private fun stopVpn() {
-        try {
-            if (isVpnRunning) {
-                isVpnRunning = false
-                vpnThread?.interrupt()
-                vpnThread = null
-                vpnInterface?.close()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+    private fun establishVpnConnection() {
+        val builder = Builder()
+        vpnInterface = builder.setSession("NormVpnService")
+            .addAddress("10.0.0.2", 32)
+            .addRoute("0.0.0.0", 0)
+            .establish()
+
+        isVpnRunning = true
+    }
+
+    fun stopVpn() {
+        Log.d("MyLog", "stopVpn()")
+        if (isVpnRunning) {
+            isVpnRunning = false
+            vpnThread?.interrupt()
+            vpnThread = null
+            vpnInterface?.close()
+            isVpnRunning = false
+            sendStateVpnRunning()
+            stopSelf()
         }
     }
 
@@ -155,7 +159,19 @@ class NormVpnService : VpnService() {
     }
 
     private fun sendStateVpnRunning() {
+        Intent(Actions.IS_VPN_RUNNING.toString()).also {
+            it.putExtra("isvpnrunning", isVpnRunning)
+            sendBroadcast(it)
+        }
+        Log.d("MyLog", "Service: $isVpnRunning")
+    }
 
+    fun getStateVpnRunning(): Boolean {
+        return isVpnRunning
+    }
+
+    override fun onBind(intent: Intent): IBinder {
+        return binder
     }
 
     companion object {
@@ -163,6 +179,10 @@ class NormVpnService : VpnService() {
     }
 
     enum class Actions {
-        STOP_VPN_SERVICE, START_VPN_SERVICE
+        STOP_VPN_SERVICE, START_VPN_SERVICE, IS_VPN_RUNNING
+    }
+
+    inner class NormVpnBinder : Binder() {
+        fun getService(): NormVpnService = this@NormVpnService
     }
 }

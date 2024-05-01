@@ -11,8 +11,10 @@ class MainViewModel() : ViewModel() {
         private set
 
     fun startVpn() {
+
     }
 
     fun stopVpn() {
+
     }
 }
