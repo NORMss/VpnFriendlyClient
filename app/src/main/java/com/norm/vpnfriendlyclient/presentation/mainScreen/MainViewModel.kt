@@ -1,20 +1,27 @@
 package com.norm.vpnfriendlyclient.presentation.mainScreen
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.norm.vpnfriendlyclient.domain.VpnController
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-class MainViewModel() : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val vpnController: VpnController,
+) : ViewModel() {
+    private val _state = MutableStateFlow(MainState())
+    val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _state.value)
 
-    var state by mutableStateOf(MainState())
-        private set
 
     fun startVpn() {
-
+        vpnController.startVpn()
     }
 
     fun stopVpn() {
-
+        vpnController.stopVpn()
     }
 }

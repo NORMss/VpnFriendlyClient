@@ -1,6 +1,5 @@
 package com.norm.vpnfriendlyclient.presentation.mainScreen
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,28 +10,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.norm.vpnfriendlyclient.data.AndroidNormVpnServiceController
-import com.norm.vpnfriendlyclient.data.NormVpnStateReceiver
 import com.norm.vpnfriendlyclient.presentation.medium_padding
 import com.norm.vpnfriendlyclient.presentation.smale_padding
-import com.norm.vpnfriendlyclient.service.NormVpnService
 
 @Composable
 fun MainScreen(
-    context: Context,
+    state: MainState,
+    onStartVpn: () -> Unit,
+    onStopVpn: () -> Unit,
 ) {
-    val vpnController = AndroidNormVpnServiceController(context)
-
-    val text by remember {
-        mutableStateOf(vpnController.isVpnRunning.value)
-    }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -46,7 +34,7 @@ fun MainScreen(
         ) {
             Button(
                 onClick = {
-                    vpnController.startVpn()
+                    onStartVpn()
                 }
             ) {
                 Text(
@@ -56,7 +44,7 @@ fun MainScreen(
             Spacer(modifier = Modifier.height(smale_padding))
             Button(
                 onClick = {
-                    vpnController.stopVpn()
+                    onStopVpn()
                 }
             ) {
                 Text(
@@ -64,7 +52,7 @@ fun MainScreen(
                 )
             }
             Text(
-                text = "VPN Status: ${text}"
+                text = "VPN Status: ${state.isVpnRunning}"
             )
         }
     }

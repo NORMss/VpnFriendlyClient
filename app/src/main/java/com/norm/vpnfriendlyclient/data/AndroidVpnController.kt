@@ -8,7 +8,7 @@ import android.content.ServiceConnection
 import android.net.VpnService
 import android.os.IBinder
 import android.util.Log
-import com.norm.vpnfriendlyclient.domain.NormVpnServiceController
+import com.norm.vpnfriendlyclient.domain.VpnController
 import com.norm.vpnfriendlyclient.domain.VpnKey
 import com.norm.vpnfriendlyclient.service.NormVpnService
 import com.norm.vpnfriendlyclient.util.PrepareVpnActivity
@@ -20,9 +20,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class AndroidNormVpnServiceController(
+class AndroidVpnController(
     private val context: Context,
-) : NormVpnServiceController {
+) : VpnController {
     private var normVpnService: NormVpnService? = null
     private var isNormVpnServiceBound: Boolean = false
 
@@ -55,7 +55,7 @@ class AndroidNormVpnServiceController(
 
     private val normVpnStateReceiver = NormVpnStateReceiver {
         _isVpnRunning.update { it }
-        Log.d("MyLog", it.toString())
+//        Log.d("MyLog", it.toString())
     }
 
     init {

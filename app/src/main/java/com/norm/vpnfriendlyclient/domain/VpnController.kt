@@ -3,7 +3,7 @@ package com.norm.vpnfriendlyclient.domain
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
-interface NormVpnServiceController {
+interface VpnController {
 
     val isVpnRunning: StateFlow<Boolean>
     val listKeys: StateFlow<List<VpnKey>>
