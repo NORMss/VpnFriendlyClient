@@ -7,17 +7,24 @@ import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.net.VpnService
 import android.os.IBinder
+import android.telecom.ConnectionRequest
 import android.util.Log
 import com.norm.vpnfriendlyclient.domain.VpnController
 import com.norm.vpnfriendlyclient.domain.VpnKey
+import com.norm.vpnfriendlyclient.domain.VpnRunResult
 import com.norm.vpnfriendlyclient.service.NormVpnService
 import com.norm.vpnfriendlyclient.util.PrepareVpnActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 
 class AndroidVpnController(
@@ -55,7 +62,6 @@ class AndroidVpnController(
 
     private val normVpnStateReceiver = NormVpnStateReceiver {
         _isVpnRunning.update { it }
-//        Log.d("MyLog", it.toString())
     }
 
     init {
@@ -81,12 +87,18 @@ class AndroidVpnController(
     override val errors: SharedFlow<String>
         get() = _errors.asSharedFlow()
 
-    override fun startVpn() {
+    override fun startVpn(): Flow<VpnRunResult> {
         normVpnService?.startVpn()
+        return flow {
+//            TODO("Add check permission VPN Service")
+            emit(VpnRunResult.VpnRunEstablished)
+        }.flowOn(Dispatchers.IO)
     }
 
-    override fun stopVpn() {
+    override fun stopVpn(): Flow<VpnRunResult> {
         normVpnService?.stopVpn()
+        return flow<VpnRunResult> {
+        }.flowOn(Dispatchers.IO)
     }
 
     fun getStateVpnRunning(): Boolean {

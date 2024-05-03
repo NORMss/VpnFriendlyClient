@@ -92,6 +92,7 @@ class NormVpnService : VpnService() {
     }
 
     fun startVpn() {
+        Log.d("MyLog", "startVpn")
         vpnThread = Thread {
             try {
                 establishVpnConnection()
