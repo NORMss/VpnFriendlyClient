@@ -1,19 +1,18 @@
 package com.norm.vpnfriendlyclient.presentation.mainScreen
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.norm.vpnfriendlyclient.presentation.medium_padding
-import com.norm.vpnfriendlyclient.presentation.smale_padding
+import com.norm.vpnfriendlyclient.presentation.home.HomeScreen
 
 @Composable
 fun MainScreen(
@@ -21,39 +20,39 @@ fun MainScreen(
     onStartVpn: () -> Unit,
     onStopVpn: () -> Unit,
 ) {
-    Box(
+    Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(medium_padding),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(
+            .fillMaxSize(),
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
                 onClick = {
-                    onStartVpn()
+
                 }
             ) {
-                Text(
-                    text = "Start VPN"
-                )
-            }
-            Spacer(modifier = Modifier.height(smale_padding))
-            Button(
-                onClick = {
-                    onStopVpn()
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "add_server",
+                    )
+                    Text(
+                        text = "Add server"
+                    )
                 }
-            ) {
-                Text(
-                    text = "Stop VPN"
-                )
             }
-            Text(
-                text = "VPN Status: ${state.isVpnRunning}"
-            )
         }
+    ) { padding ->
+        HomeScreen(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    top = padding.calculateTopPadding(),
+                    bottom = padding.calculateBottomPadding(),
+                ),
+            state,
+            onStartVpn,
+            onStopVpn,
+        )
     }
 }
