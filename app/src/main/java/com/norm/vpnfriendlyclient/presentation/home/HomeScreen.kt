@@ -1,10 +1,8 @@
 package com.norm.vpnfriendlyclient.presentation.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,12 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import com.norm.vpnfriendlyclient.presentation.height_current_server_box
+import com.norm.vpnfriendlyclient.domain.VpnKey
+import com.norm.vpnfriendlyclient.presentation.components.ServerCard
 import com.norm.vpnfriendlyclient.presentation.mainScreen.MainState
 import com.norm.vpnfriendlyclient.presentation.medium_padding
 import com.norm.vpnfriendlyclient.presentation.medium_rounded
@@ -34,26 +32,22 @@ fun HomeScreen(
     Column(
         modifier = modifier,
     ) {
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(height_current_server_box)
                 .padding(top = smale_padding)
                 .padding(horizontal = medium_padding)
-                .clip(RoundedCornerShape(medium_rounded))
-                .background(MaterialTheme.colorScheme.tertiaryContainer),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
         ) {
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = smale_padding)
-            ) {
-                Text(
-                    text = "Current server #2",
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-            }
+            ServerCard(
+                vpnKey = VpnKey(
+                    "ss://123",
+                    null,
+                    null,
+                ),
+                {
+
+                }
+            )
         }
         Spacer(
             modifier = Modifier
