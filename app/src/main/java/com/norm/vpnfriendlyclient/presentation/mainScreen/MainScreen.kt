@@ -10,9 +10,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.norm.vpnfriendlyclient.presentation.addServer.AddServerDialog
 import com.norm.vpnfriendlyclient.presentation.home.HomeScreen
 
 @Composable
@@ -21,13 +26,16 @@ fun MainScreen(
     onStartVpn: () -> Unit,
     onStopVpn: () -> Unit,
 ) {
+    var showDialog by remember {
+        mutableStateOf(false)
+    }
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {
-
+                    showDialog = true
                 }
             ) {
                 Row(
@@ -44,6 +52,16 @@ fun MainScreen(
             }
         }
     ) { padding ->
+        if (showDialog) {
+            AddServerDialog(
+                onShowDialog = {
+                    showDialog = it
+                },
+                onAddServer = {
+
+                }
+            )
+        }
         HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
