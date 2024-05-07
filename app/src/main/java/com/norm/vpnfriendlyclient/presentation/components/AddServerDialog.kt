@@ -1,4 +1,4 @@
-package com.norm.vpnfriendlyclient.presentation.addServer
+package com.norm.vpnfriendlyclient.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,8 +33,8 @@ import com.norm.vpnfriendlyclient.presentation.smale_padding
 
 @Composable
 fun AddServerDialog(
-    onShowDialog: (Boolean) -> Unit,
     onAddServer: (VpnKey) -> Unit,
+    onShowDialog: (Boolean) -> Unit,
 ) {
     val clipBoardManager = LocalClipboardManager.current
 
@@ -72,6 +72,14 @@ fun AddServerDialog(
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(medium_padding)
         ) {
+            Text(
+                text = "Add server",
+                style = MaterialTheme.typography.headlineMedium,
+            )
+            Spacer(
+                modifier = Modifier
+                    .height(medium_padding)
+            )
             OutlinedTextField(
                 value = key,
                 onValueChange = {
