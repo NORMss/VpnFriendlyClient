@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import com.norm.vpnfriendlyclient.domain.VpnKey
+import com.norm.vpnfriendlyclient.domain.model.VpnKey
 import com.norm.vpnfriendlyclient.presentation.components.ServerCard
 import com.norm.vpnfriendlyclient.presentation.mainScreen.MainState
 import com.norm.vpnfriendlyclient.presentation.medium_padding

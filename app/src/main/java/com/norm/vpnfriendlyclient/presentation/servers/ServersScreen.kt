@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.norm.vpnfriendlyclient.domain.VpnKey
+import com.norm.vpnfriendlyclient.domain.model.VpnKey
 import com.norm.vpnfriendlyclient.presentation.components.ServerCard
 import androidx.compose.ui.tooling.preview.Preview
 import com.norm.vpnfriendlyclient.presentation.medium_padding
@@ -22,7 +22,7 @@ fun ServersScreen(
 ) {
     LazyColumn(
         modifier = modifier
-            .padding(vertical = smale_padding),
+            .padding(top = smale_padding),
         verticalArrangement = Arrangement.spacedBy(medium_padding),
         contentPadding = PaddingValues(horizontal = medium_padding),
     ) {

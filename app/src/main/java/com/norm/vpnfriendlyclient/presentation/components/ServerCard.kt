@@ -21,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.norm.vpnfriendlyclient.R
-import com.norm.vpnfriendlyclient.domain.VpnKey
+import com.norm.vpnfriendlyclient.domain.model.VpnKey
 import com.norm.vpnfriendlyclient.presentation.height_current_server_box
 import com.norm.vpnfriendlyclient.presentation.medium_rounded
 import com.norm.vpnfriendlyclient.presentation.smale_padding

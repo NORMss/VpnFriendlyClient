@@ -1,5 +1,6 @@
 package com.norm.vpnfriendlyclient.domain
 
+import com.norm.vpnfriendlyclient.domain.model.VpnKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow

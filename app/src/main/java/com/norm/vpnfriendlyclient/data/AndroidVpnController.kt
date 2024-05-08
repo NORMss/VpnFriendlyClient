@@ -7,10 +7,9 @@ import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.net.VpnService
 import android.os.IBinder
-import android.telecom.ConnectionRequest
 import android.util.Log
 import com.norm.vpnfriendlyclient.domain.VpnController
-import com.norm.vpnfriendlyclient.domain.VpnKey
+import com.norm.vpnfriendlyclient.domain.model.VpnKey
 import com.norm.vpnfriendlyclient.domain.VpnRunResult
 import com.norm.vpnfriendlyclient.service.NormVpnService
 import com.norm.vpnfriendlyclient.util.PrepareVpnActivity
@@ -22,7 +21,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update

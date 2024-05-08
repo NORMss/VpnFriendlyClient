@@ -26,7 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
-import com.norm.vpnfriendlyclient.domain.VpnKey
+import com.norm.vpnfriendlyclient.domain.model.VpnKey
 import com.norm.vpnfriendlyclient.presentation.large_rounded
 import com.norm.vpnfriendlyclient.presentation.medium_padding
 import com.norm.vpnfriendlyclient.presentation.smale_padding
