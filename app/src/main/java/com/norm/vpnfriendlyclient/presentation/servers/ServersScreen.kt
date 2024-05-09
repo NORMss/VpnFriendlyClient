@@ -19,6 +19,8 @@ fun ServersScreen(
     modifier: Modifier = Modifier,
     servers: List<VpnKey>,
     onServerClick: (VpnKey) -> Unit,
+    onDeleteClick: (VpnKey) -> Unit,
+    onEditClick: (VpnKey) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier
@@ -29,8 +31,14 @@ fun ServersScreen(
         items(servers) { item ->
             ServerCard(
                 vpnKey = item,
-                onClick = {
+                onServerClick = {
                     onServerClick(item)
+                },
+                onEditClick = {
+                    onEditClick(item)
+                },
+                onDeleteClick = {
+                    onDeleteClick(item)
                 }
             )
         }
@@ -43,9 +51,15 @@ fun PreviewServersScreen() {
     ServersScreen(
         modifier = Modifier.fillMaxSize(),
         listServer,
-        {
+        onServerClick = {
 
-        }
+        },
+        onDeleteClick = {
+
+        },
+        onEditClick = {
+
+        },
     )
 }
 

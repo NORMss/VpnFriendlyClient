@@ -11,6 +11,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,7 +35,9 @@ import com.norm.vpnfriendlyclient.presentation.smale_padding
 @Composable
 fun ServerCard(
     vpnKey: VpnKey,
-    onClick: () -> Unit,
+    onServerClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+    onEditClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -38,44 +45,76 @@ fun ServerCard(
             .height(height_current_server_box)
             .clip(RoundedCornerShape(medium_rounded))
             .background(MaterialTheme.colorScheme.tertiaryContainer)
+            .padding(horizontal = smale_padding)
             .clickable {
-                onClick()
+                onServerClick()
             },
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = smale_padding)
                 .weight(1f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(
-                text = vpnKey.name ?: "Server",
-                style = MaterialTheme.typography.bodyLarge,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+            Row(
+                modifier = Modifier
+                    .weight(1f),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = vpnKey.name ?: "Server",
+                    style = MaterialTheme.typography.bodyLarge,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .padding(
+                        horizontal = smale_padding
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = vpnKey.country ?: "indefinite",
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 1,
+                )
+                Spacer(
+                    modifier = Modifier
+                        .width(smale_padding)
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.undefined),
+                    contentDescription = null,
+                )
+            }
         }
         Row(
-            modifier = Modifier
-                .padding(
-                    horizontal = smale_padding
-                ),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(
-                text = vpnKey.country ?: "indefinite",
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1,
-            )
-            Spacer(
-                modifier = Modifier
-                    .width(smale_padding)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.undefined),
-                contentDescription = null,
-            )
+            IconButton(
+                onClick = {
+                    onEditClick()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "edit"
+                )
+            }
+            IconButton(
+                onClick = {
+                    onDeleteClick()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "delete"
+                )
+            }
         }
     }
 }
@@ -88,8 +127,15 @@ fun PreviewServerCard() {
             "ss://123",
             "My Russia Server",
             "ru",
-        )
-    ) {
+        ),
+        onServerClick = {
 
-    }
+        },
+        onDeleteClick = {
+
+        },
+        onEditClick = {
+
+        },
+    )
 }

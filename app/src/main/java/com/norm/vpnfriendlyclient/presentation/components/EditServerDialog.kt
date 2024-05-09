@@ -32,7 +32,7 @@ import com.norm.vpnfriendlyclient.presentation.smale_padding
 @Composable
 fun EditServerDialog(
     vpnKey: VpnKey,
-    onAddServer: (VpnKey) -> Unit,
+    onEditServer: (VpnKey) -> Unit,
     onShowDialog: (Boolean) -> Unit,
 ) {
     var name by remember {
@@ -120,7 +120,7 @@ fun EditServerDialog(
                 )
                 Button(
                     onClick = {
-                        onAddServer(
+                        onEditServer(
                             VpnKey(
                                 key = vpnKey.key,
                                 name = name,

@@ -9,6 +9,11 @@ import com.norm.vpnfriendlyclient.data.lcoal.VpnDatabase
 import com.norm.vpnfriendlyclient.data.repository.VpnRepositoryImpl
 import com.norm.vpnfriendlyclient.domain.VpnController
 import com.norm.vpnfriendlyclient.domain.repository.VpnRepository
+import com.norm.vpnfriendlyclient.domain.usecases.DeleteServer
+import com.norm.vpnfriendlyclient.domain.usecases.SelectServer
+import com.norm.vpnfriendlyclient.domain.usecases.SelectServers
+import com.norm.vpnfriendlyclient.domain.usecases.ServerUseCases
+import com.norm.vpnfriendlyclient.domain.usecases.UpsertServer
 import com.norm.vpnfriendlyclient.util.DB_NAME
 import dagger.Module
 import dagger.Provides
@@ -49,4 +54,17 @@ class AppModule {
     fun provideNewsRepository(
         newsDao: VpnDao,
     ): VpnRepository = VpnRepositoryImpl(newsDao)
+
+    @Provides
+    @Singleton
+    fun provideServerUseCases(
+        vpnRepository: VpnRepository,
+    ): ServerUseCases {
+        return ServerUseCases(
+            deleteServer = DeleteServer(vpnRepository),
+            selectServer = SelectServer(vpnRepository),
+            selectServers = SelectServers(vpnRepository),
+            upsertServer = UpsertServer(vpnRepository),
+        )
+    }
 }

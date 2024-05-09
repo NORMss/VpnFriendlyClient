@@ -30,13 +30,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.norm.vpnfriendlyclient.domain.model.VpnKey
 import com.norm.vpnfriendlyclient.presentation.components.AddServerDialog
 import com.norm.vpnfriendlyclient.presentation.components.BottomNavigationItem
+import com.norm.vpnfriendlyclient.presentation.components.EditServerDialog
 import com.norm.vpnfriendlyclient.presentation.components.VpnBottomNavigation
 import com.norm.vpnfriendlyclient.presentation.home.HomeScreen
 import com.norm.vpnfriendlyclient.presentation.nvgraph.Route
 import com.norm.vpnfriendlyclient.presentation.servers.ServersScreen
-import com.norm.vpnfriendlyclient.presentation.servers.listServer
+import com.norm.vpnfriendlyclient.presentation.servers.ServersViewModel
 
 @Composable
 fun MainScreen() {
@@ -66,9 +68,17 @@ fun MainScreen() {
         mutableIntStateOf(0)
     }
 
-    var showDialog by remember {
+    var showDialogAdd by remember {
         mutableStateOf(false)
     }
+
+    var showDialogEdit by remember {
+        mutableStateOf(false)
+    }
+
+    var editServer = VpnKey(
+        "", "", "",
+    )
 
     selectedItem = remember(key1 = backstackState) {
         when (backstackState?.destination?.route) {
@@ -85,7 +95,7 @@ fun MainScreen() {
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {
-                    showDialog = true
+                    showDialogAdd = true
                 }
             ) {
                 Row(
@@ -126,14 +136,28 @@ fun MainScreen() {
             )
         }
     ) { padding ->
-        if (showDialog) {
+        val viewModel = hiltViewModel<MainViewModel>()
+        val state = viewModel.state.collectAsState().value
+
+        if (showDialogAdd) {
             AddServerDialog(
                 onShowDialog = {
-                    showDialog = it
+                    showDialogAdd = it
                 },
                 onAddServer = {
-
+                    viewModel.addServer(it)
                 }
+            )
+        }
+        if (showDialogEdit) {
+            EditServerDialog(
+                onShowDialog = {
+                    showDialogEdit = it
+                },
+                onEditServer = {
+                    viewModel.editServer(it)
+                },
+                vpnKey = editServer,
             )
         }
         NavHost(
@@ -143,8 +167,6 @@ fun MainScreen() {
             composable(
                 route = Route.HomeScreen.route,
             ) {
-                val viewModel = hiltViewModel<MainViewModel>()
-                val state = viewModel.state.collectAsState().value
                 HomeScreen(
                     modifier = Modifier
                         .fillMaxSize()
@@ -160,6 +182,8 @@ fun MainScreen() {
             composable(
                 route = Route.ServersScreen.route,
             ) {
+                val viewModelServers = hiltViewModel<ServersViewModel>()
+                val stateServers = viewModelServers.state.value
                 ServersScreen(
                     modifier = Modifier
                         .fillMaxSize()
@@ -167,13 +191,20 @@ fun MainScreen() {
                             bottom = padding.calculateBottomPadding(),
                             top = padding.calculateTopPadding(),
                         ),
-                    servers = listServer,
+                    servers = stateServers.servers,
                     onServerClick = {
                         Toast.makeText(
                             localContext,
                             "This server from ${it.country}",
                             Toast.LENGTH_LONG,
                         ).show()
+                    },
+                    onEditClick = {
+                        editServer = it
+                        showDialogEdit = true
+                    },
+                    onDeleteClick = {
+                        viewModel.deleteServer(it)
                     }
                 )
             }

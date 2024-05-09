@@ -9,18 +9,18 @@ class VpnRepositoryImpl(
     private val vpnDao: VpnDao,
 ) : VpnRepository {
     override suspend fun upsertServer(vpnKey: VpnKey) {
-        TODO("Not yet implemented")
+        vpnDao.upsert(vpnKey)
     }
 
     override suspend fun deleteServer(vpnKey: VpnKey) {
-        TODO("Not yet implemented")
+        vpnDao.delete(vpnKey)
     }
 
     override fun selectedServers(): Flow<List<VpnKey>> {
-        TODO("Not yet implemented")
+        return vpnDao.getServers()
     }
 
     override suspend fun selectServer(key: String): VpnKey? {
-        TODO("Not yet implemented")
+        return vpnDao.getServer(key)
     }
 }

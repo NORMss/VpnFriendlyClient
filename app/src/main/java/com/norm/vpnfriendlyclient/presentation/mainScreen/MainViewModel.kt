@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.norm.vpnfriendlyclient.domain.VpnController
 import com.norm.vpnfriendlyclient.domain.VpnRunResult
+import com.norm.vpnfriendlyclient.domain.model.VpnKey
+import com.norm.vpnfriendlyclient.domain.usecases.ServerUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -14,11 +16,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val vpnController: VpnController,
+    private val serverUseCases: ServerUseCases,
 ) : ViewModel() {
     private val _state = MutableStateFlow(MainState())
     val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _state.value)
@@ -86,5 +90,23 @@ class MainViewModel @Inject constructor(
 
             }
             .launchIn(viewModelScope)
+    }
+
+    fun addServer(vpnKey: VpnKey) {
+        viewModelScope.launch {
+            serverUseCases.upsertServer(vpnKey)
+        }
+    }
+
+    fun editServer(vpnKey: VpnKey) {
+        viewModelScope.launch {
+            serverUseCases.upsertServer(vpnKey)
+        }
+    }
+
+    fun deleteServer(vpnKey: VpnKey) {
+        viewModelScope.launch {
+            serverUseCases.deleteServer(vpnKey)
+        }
     }
 }

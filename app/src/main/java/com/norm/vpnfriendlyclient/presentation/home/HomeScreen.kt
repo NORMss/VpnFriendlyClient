@@ -44,9 +44,15 @@ fun HomeScreen(
                     null,
                     null,
                 ),
-                {
+                onServerClick = {
 
-                }
+                },
+                onDeleteClick = {
+
+                },
+                onEditClick = {
+
+                },
             )
         }
         Spacer(
