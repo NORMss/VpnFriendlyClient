@@ -5,5 +5,5 @@ import com.norm.vpnfriendlyclient.domain.model.VpnKey
 data class MainState(
     val isVpnRunning: Boolean = false,
     val errorMessage: String? = null,
-    val listKeys: List<VpnKey> = emptyList(),
+    val vpnKey: VpnKey? = null,
 )

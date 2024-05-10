@@ -1,6 +1,5 @@
 package com.norm.vpnfriendlyclient.presentation.mainScreen
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -42,8 +40,6 @@ import com.norm.vpnfriendlyclient.presentation.servers.ServersViewModel
 
 @Composable
 fun MainScreen() {
-    val localContext = LocalContext.current
-
     val vpnNavigationItems = remember {
         listOf(
             BottomNavigationItem(
@@ -167,6 +163,10 @@ fun MainScreen() {
             composable(
                 route = Route.HomeScreen.route,
             ) {
+                navController.previousBackStackEntry?.savedStateHandle?.get<String>("server")
+                    ?.let { key ->
+                        viewModel.selectedServer(key)
+                    }
                 HomeScreen(
                     modifier = Modifier
                         .fillMaxSize()
@@ -177,6 +177,11 @@ fun MainScreen() {
                     state = state,
                     onStartVpn = viewModel::startVpn,
                     onStopVpn = viewModel::stopVpn,
+                    onChoiceServer = {
+                        navController.navigate(
+                            route = Route.ServersScreen.route,
+                        )
+                    }
                 )
             }
             composable(
@@ -192,12 +197,11 @@ fun MainScreen() {
                             top = padding.calculateTopPadding(),
                         ),
                     servers = stateServers.servers,
-                    onServerClick = {
-                        Toast.makeText(
-                            localContext,
-                            "This server from ${it.country}",
-                            Toast.LENGTH_LONG,
-                        ).show()
+                    navigateToServer = { key ->
+                        navigateToServer(
+                            navController = navController,
+                            key = key,
+                        )
                     },
                     onEditClick = {
                         editServer = it
@@ -205,7 +209,7 @@ fun MainScreen() {
                     },
                     onDeleteClick = {
                         viewModel.deleteServer(it)
-                    }
+                    },
                 )
             }
             composable(
@@ -241,4 +245,14 @@ private fun navigateToTab(
             launchSingleTop = true
         }
     }
+}
+
+private fun navigateToServer(
+    navController: NavController,
+    key: String,
+) {
+    navController.currentBackStackEntry?.savedStateHandle?.set("server", key)
+    navController.navigate(
+        route = Route.HomeScreen.route
+    )
 }

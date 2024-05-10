@@ -15,8 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import com.norm.vpnfriendlyclient.domain.model.VpnKey
-import com.norm.vpnfriendlyclient.presentation.components.ServerCard
+import com.norm.vpnfriendlyclient.presentation.components.CurrentServerCard
+import com.norm.vpnfriendlyclient.presentation.components.EmptyServerCard
 import com.norm.vpnfriendlyclient.presentation.mainScreen.MainState
 import com.norm.vpnfriendlyclient.presentation.medium_padding
 import com.norm.vpnfriendlyclient.presentation.medium_rounded
@@ -28,6 +28,7 @@ fun HomeScreen(
     state: MainState,
     onStartVpn: () -> Unit,
     onStopVpn: () -> Unit,
+    onChoiceServer: () -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -38,22 +39,20 @@ fun HomeScreen(
                 .padding(top = smale_padding)
                 .padding(horizontal = medium_padding)
         ) {
-            ServerCard(
-                vpnKey = VpnKey(
-                    "ss://123",
-                    null,
-                    null,
-                ),
-                onServerClick = {
-
-                },
-                onDeleteClick = {
-
-                },
-                onEditClick = {
-
-                },
-            )
+            if (state.vpnKey == null) {
+                EmptyServerCard(
+                    onServerClick = {
+                        onChoiceServer()
+                    }
+                )
+            } else {
+                CurrentServerCard(
+                    vpnKey = state.vpnKey,
+                    onServerClick = {
+                        onChoiceServer()
+                    }
+                )
+            }
         }
         Spacer(
             modifier = Modifier

@@ -19,6 +19,6 @@ interface VpnDao {
     @Query("SELECT * FROM servers")
     fun getServers(): Flow<List<VpnKey>>
 
-    @Query("SELECT * FROM servers WHERE 'key'=:key")
+    @Query("SELECT * FROM servers WHERE `key` = :key")
     suspend fun getServer(key: String): VpnKey?
 }

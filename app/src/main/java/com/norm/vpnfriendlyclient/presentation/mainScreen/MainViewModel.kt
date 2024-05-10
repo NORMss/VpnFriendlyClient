@@ -1,5 +1,6 @@
 package com.norm.vpnfriendlyclient.presentation.mainScreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.norm.vpnfriendlyclient.domain.VpnController
@@ -90,6 +91,17 @@ class MainViewModel @Inject constructor(
 
             }
             .launchIn(viewModelScope)
+    }
+
+    fun selectedServer(key: String) {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    vpnKey = serverUseCases.selectServer(key)
+                )
+            }
+        }
+        Log.d("MyLog", state.value.vpnKey?.key.toString())
     }
 
     fun addServer(vpnKey: VpnKey) {

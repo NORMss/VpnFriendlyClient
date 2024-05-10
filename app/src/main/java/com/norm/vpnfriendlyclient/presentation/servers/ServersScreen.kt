@@ -18,7 +18,7 @@ import com.norm.vpnfriendlyclient.presentation.smale_padding
 fun ServersScreen(
     modifier: Modifier = Modifier,
     servers: List<VpnKey>,
-    onServerClick: (VpnKey) -> Unit,
+    navigateToServer: (String) -> Unit,
     onDeleteClick: (VpnKey) -> Unit,
     onEditClick: (VpnKey) -> Unit,
 ) {
@@ -32,7 +32,7 @@ fun ServersScreen(
             ServerCard(
                 vpnKey = item,
                 onServerClick = {
-                    onServerClick(item)
+                    navigateToServer(item.key)
                 },
                 onEditClick = {
                     onEditClick(item)
@@ -51,7 +51,7 @@ fun PreviewServersScreen() {
     ServersScreen(
         modifier = Modifier.fillMaxSize(),
         listServer,
-        onServerClick = {
+        navigateToServer = {
 
         },
         onDeleteClick = {
