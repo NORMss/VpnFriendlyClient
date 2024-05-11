@@ -4,3 +4,5 @@ const val CHANNEL_ID = "VPN_CHANNEL_ID"
 const val NOTIFICATION_ID = 1
 
 const val DB_NAME = "vpnServers.db"
+
+const val BASE_URL = "https://ipinfo.io/"
