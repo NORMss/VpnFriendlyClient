@@ -28,10 +28,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.norm.vpnfriendlyclient.domain.model.VpnKey
 import com.norm.vpnfriendlyclient.presentation.components.AddServerDialog
 import com.norm.vpnfriendlyclient.presentation.components.BottomNavigationItem
-import com.norm.vpnfriendlyclient.presentation.components.EditServerDialog
 import com.norm.vpnfriendlyclient.presentation.components.VpnBottomNavigation
 import com.norm.vpnfriendlyclient.presentation.home.HomeScreen
 import com.norm.vpnfriendlyclient.presentation.nvgraph.Route
@@ -67,14 +65,6 @@ fun MainScreen() {
     var showDialogAdd by remember {
         mutableStateOf(false)
     }
-
-    var showDialogEdit by remember {
-        mutableStateOf(false)
-    }
-
-    var editServer = VpnKey(
-        "", "", "",
-    )
 
     selectedItem = remember(key1 = backstackState) {
         when (backstackState?.destination?.route) {
@@ -145,17 +135,6 @@ fun MainScreen() {
                 }
             )
         }
-        if (showDialogEdit) {
-            EditServerDialog(
-                onShowDialog = {
-                    showDialogEdit = it
-                },
-                onEditServer = {
-                    viewModel.editServer(it)
-                },
-                vpnKey = editServer,
-            )
-        }
         NavHost(
             navController = navController,
             startDestination = Route.HomeScreen.route,
@@ -178,7 +157,8 @@ fun MainScreen() {
                     onStartVpn = viewModel::startVpn,
                     onStopVpn = viewModel::stopVpn,
                     onChoiceServer = {
-                        navController.navigate(
+                        navigateToTab(
+                            navController = navController,
                             route = Route.ServersScreen.route,
                         )
                     }
@@ -204,11 +184,10 @@ fun MainScreen() {
                         )
                     },
                     onEditClick = {
-                        editServer = it
-                        showDialogEdit = true
+                        viewModelServers.editServer(it)
                     },
                     onDeleteClick = {
-                        viewModel.deleteServer(it)
+                        viewModelServers.deleteServer(it)
                     },
                 )
             }

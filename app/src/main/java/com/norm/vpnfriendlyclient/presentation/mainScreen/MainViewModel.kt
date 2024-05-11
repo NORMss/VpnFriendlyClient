@@ -109,16 +109,4 @@ class MainViewModel @Inject constructor(
             serverUseCases.upsertServer(vpnKey)
         }
     }
-
-    fun editServer(vpnKey: VpnKey) {
-        viewModelScope.launch {
-            serverUseCases.upsertServer(vpnKey)
-        }
-    }
-
-    fun deleteServer(vpnKey: VpnKey) {
-        viewModelScope.launch {
-            serverUseCases.deleteServer(vpnKey)
-        }
-    }
 }

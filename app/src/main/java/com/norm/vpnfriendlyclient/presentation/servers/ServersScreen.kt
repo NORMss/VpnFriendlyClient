@@ -7,10 +7,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.norm.vpnfriendlyclient.domain.model.VpnKey
-import com.norm.vpnfriendlyclient.presentation.components.ServerCard
 import androidx.compose.ui.tooling.preview.Preview
+import com.norm.vpnfriendlyclient.domain.model.VpnKey
+import com.norm.vpnfriendlyclient.presentation.components.DeleteServerDialog
+import com.norm.vpnfriendlyclient.presentation.components.EditServerDialog
+import com.norm.vpnfriendlyclient.presentation.components.ServerCard
 import com.norm.vpnfriendlyclient.presentation.medium_padding
 import com.norm.vpnfriendlyclient.presentation.smale_padding
 
@@ -22,6 +28,54 @@ fun ServersScreen(
     onDeleteClick: (VpnKey) -> Unit,
     onEditClick: (VpnKey) -> Unit,
 ) {
+    var showDeleteServerDialog by remember {
+        mutableStateOf(false)
+    }
+    var showDialogEdit by remember {
+        mutableStateOf(false)
+    }
+
+    var deleteServer by remember {
+        mutableStateOf(
+            VpnKey(
+                "",
+                null,
+                null,
+            )
+        )
+    }
+    var editServer by remember {
+        mutableStateOf(
+            VpnKey(
+                "",
+                null,
+                null,
+            )
+        )
+    }
+
+    if (showDeleteServerDialog) {
+        DeleteServerDialog(
+            vpnKey = deleteServer,
+            onDeleteClick = {
+                onDeleteClick(deleteServer)
+            },
+            onShowDialog = {
+                showDeleteServerDialog = it
+            }
+        )
+    }
+    if (showDialogEdit) {
+        EditServerDialog(
+            vpnKey = editServer,
+            onEditServer = {
+                onEditClick(it)
+            },
+            onShowDialog = {
+                showDialogEdit = it
+            },
+        )
+    }
     LazyColumn(
         modifier = modifier
             .padding(top = smale_padding),
@@ -35,10 +89,12 @@ fun ServersScreen(
                     navigateToServer(item.key)
                 },
                 onEditClick = {
-                    onEditClick(item)
+                    editServer = item
+                    showDialogEdit = true
                 },
                 onDeleteClick = {
-                    onDeleteClick(item)
+                    deleteServer = item
+                    showDeleteServerDialog = true
                 }
             )
         }

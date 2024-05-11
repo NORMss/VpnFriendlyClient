@@ -4,10 +4,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.norm.vpnfriendlyclient.domain.model.VpnKey
 import com.norm.vpnfriendlyclient.domain.usecases.ServerUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,5 +27,17 @@ class ServersViewModel @Inject constructor(
         serverUseCases.selectServers().onEach {
             _state.value = _state.value.copy(servers = it.asReversed())
         }.launchIn(viewModelScope)
+    }
+
+    fun editServer(vpnKey: VpnKey) {
+        viewModelScope.launch {
+            serverUseCases.upsertServer(vpnKey)
+        }
+    }
+
+    fun deleteServer(vpnKey: VpnKey) {
+        viewModelScope.launch {
+            serverUseCases.deleteServer(vpnKey)
+        }
     }
 }
