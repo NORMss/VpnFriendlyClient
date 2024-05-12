@@ -10,7 +10,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -34,6 +38,7 @@ import com.norm.vpnfriendlyclient.presentation.smale_padding
 @Composable
 fun AddServerDialog(
     onAddServer: (VpnKey) -> Unit,
+    onGetLocation: (String) -> String,
     onShowDialog: (Boolean) -> Unit,
 ) {
     val clipBoardManager = LocalClipboardManager.current
@@ -116,20 +121,44 @@ fun AddServerDialog(
                 modifier = Modifier
                     .height(smale_padding)
             )
-            OutlinedTextField(
-                value = country,
-                onValueChange = {
-                    country = it
-                },
+            Row(
                 modifier = Modifier
                     .fillMaxWidth(),
-                placeholder = {
-                    Text(
-                        text = "Сountry",
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                OutlinedTextField(
+                    value = country,
+                    onValueChange = {
+                        country = it
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    placeholder = {
+                        Text(
+                            text = "Сountry",
+                        )
+                    },
+                    maxLines = 1,
+                )
+                Spacer(
+                    modifier = Modifier
+                        .width(smale_padding)
+                )
+                IconButton(
+                    onClick = {
+                        val ip =
+                            Regex("""(?<=@)\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}""").find(country)?.value
+                                ?: "80.209.240.112"
+                        country = onGetLocation(ip)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = "update_location",
                     )
-                },
-                maxLines = 1,
-            )
+                }
+            }
             Spacer(
                 modifier = Modifier
                     .height(medium_padding)
@@ -178,10 +207,8 @@ fun AddServerDialog(
 @Composable
 fun PreviewAddServerDialog() {
     AddServerDialog(
-        {
-
-        }
-    ) {
-
-    }
+        {},
+        { "" },
+        {}
+    )
 }

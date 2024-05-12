@@ -8,7 +8,9 @@ import com.norm.vpnfriendlyclient.domain.VpnRunResult
 import com.norm.vpnfriendlyclient.domain.model.VpnKey
 import com.norm.vpnfriendlyclient.domain.usecases.ServerUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val vpnController: VpnController,
@@ -108,5 +111,18 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             serverUseCases.upsertServer(vpnKey)
         }
+    }
+
+    fun getCountry(ip: String): String {
+        val result = viewModelScope.async {
+            serverUseCases.getIpLocation(ip).country
+        }
+        result.invokeOnCompletion {
+            if (it == null) {
+                Log.d("MyLog", result.getCompleted())
+                result.getCompleted()
+            }
+        }
+        return ""
     }
 }

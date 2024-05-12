@@ -5,4 +5,5 @@ data class ServerUseCases(
     val selectServer: SelectServer,
     val selectServers: SelectServers,
     val upsertServer: UpsertServer,
+    val getIpLocation: GetIpLocation,
 )

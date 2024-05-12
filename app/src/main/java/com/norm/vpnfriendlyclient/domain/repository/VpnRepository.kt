@@ -1,5 +1,6 @@
 package com.norm.vpnfriendlyclient.domain.repository
 
+import com.norm.vpnfriendlyclient.domain.model.IpLocation
 import com.norm.vpnfriendlyclient.domain.model.VpnKey
 import kotlinx.coroutines.flow.Flow
 
@@ -11,4 +12,6 @@ interface VpnRepository {
     fun selectedServers(): Flow<List<VpnKey>>
 
     suspend fun selectServer(key: String): VpnKey?
+
+    suspend fun getIpLocation(ip: String): IpLocation
 }

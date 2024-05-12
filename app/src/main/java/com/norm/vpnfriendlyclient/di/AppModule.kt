@@ -11,6 +11,7 @@ import com.norm.vpnfriendlyclient.data.repository.VpnRepositoryImpl
 import com.norm.vpnfriendlyclient.domain.VpnController
 import com.norm.vpnfriendlyclient.domain.repository.VpnRepository
 import com.norm.vpnfriendlyclient.domain.usecases.DeleteServer
+import com.norm.vpnfriendlyclient.domain.usecases.GetIpLocation
 import com.norm.vpnfriendlyclient.domain.usecases.SelectServer
 import com.norm.vpnfriendlyclient.domain.usecases.SelectServers
 import com.norm.vpnfriendlyclient.domain.usecases.ServerUseCases
@@ -23,8 +24,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -36,9 +36,9 @@ class AppModule {
     fun provideIpInfoApp(): IpInfoApi {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create()
+            .create(IpInfoApi::class.java)
     }
 
     @Provides
@@ -69,7 +69,11 @@ class AppModule {
     @Singleton
     fun provideNewsRepository(
         newsDao: VpnDao,
-    ): VpnRepository = VpnRepositoryImpl(newsDao)
+        ipInfoApi: IpInfoApi,
+    ): VpnRepository = VpnRepositoryImpl(
+        newsDao,
+        ipInfoApi,
+    )
 
     @Provides
     @Singleton
@@ -81,6 +85,7 @@ class AppModule {
             selectServer = SelectServer(vpnRepository),
             selectServers = SelectServers(vpnRepository),
             upsertServer = UpsertServer(vpnRepository),
+            getIpLocation = GetIpLocation(vpnRepository),
         )
     }
 }

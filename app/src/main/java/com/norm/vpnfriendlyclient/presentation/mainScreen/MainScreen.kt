@@ -127,12 +127,15 @@ fun MainScreen() {
 
         if (showDialogAdd) {
             AddServerDialog(
+                onAddServer = {
+                    viewModel.addServer(it)
+                },
+                onGetLocation = {
+                    viewModel.getCountry(it)
+                },
                 onShowDialog = {
                     showDialogAdd = it
                 },
-                onAddServer = {
-                    viewModel.addServer(it)
-                }
             )
         }
         NavHost(
