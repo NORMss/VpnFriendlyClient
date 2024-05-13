@@ -77,24 +77,25 @@ fun EditServerDialog(
                 },
                 maxLines = 1,
             )
-            Spacer(
-                modifier = Modifier
-                    .height(smale_padding)
-            )
-            OutlinedTextField(
-                value = country,
-                onValueChange = {
-                    country = it
-                },
-                modifier = Modifier
-                    .fillMaxWidth(),
-                placeholder = {
-                    Text(
-                        text = "Сountry",
-                    )
-                },
-                maxLines = 1,
-            )
+            //Entering the server country
+            /* Spacer(
+                 modifier = Modifier
+                     .height(smale_padding)
+             )
+             OutlinedTextField(
+                 value = country,
+                 onValueChange = {
+                     country = it
+                 },
+                 modifier = Modifier
+                     .fillMaxWidth(),
+                 placeholder = {
+                     Text(
+                         text = "Сountry",
+                     )
+                 },
+                 maxLines = 1,
+             ) */
             Spacer(
                 modifier = Modifier
                     .height(medium_padding)

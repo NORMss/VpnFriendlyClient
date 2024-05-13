@@ -5,12 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.norm.vpnfriendlyclient.domain.VpnController
 import com.norm.vpnfriendlyclient.domain.VpnRunResult
-import com.norm.vpnfriendlyclient.domain.model.VpnKey
 import com.norm.vpnfriendlyclient.domain.usecases.ServerUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -105,24 +103,5 @@ class MainViewModel @Inject constructor(
             }
         }
         Log.d("MyLog", state.value.vpnKey?.key.toString())
-    }
-
-    fun addServer(vpnKey: VpnKey) {
-        viewModelScope.launch {
-            serverUseCases.upsertServer(vpnKey)
-        }
-    }
-
-    fun getCountry(ip: String): String {
-        val result = viewModelScope.async {
-            serverUseCases.getIpLocation(ip).country
-        }
-        result.invokeOnCompletion {
-            if (it == null) {
-                Log.d("MyLog", result.getCompleted())
-                result.getCompleted()
-            }
-        }
-        return ""
     }
 }

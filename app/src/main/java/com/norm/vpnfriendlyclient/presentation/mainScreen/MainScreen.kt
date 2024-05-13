@@ -122,16 +122,16 @@ fun MainScreen() {
             )
         }
     ) { padding ->
-        val viewModel = hiltViewModel<MainViewModel>()
-        val state = viewModel.state.collectAsState().value
+        val viewModelMain = hiltViewModel<MainViewModel>()
+        val stateMain = viewModelMain.state.collectAsState().value
+
+        val viewModelServers = hiltViewModel<ServersViewModel>()
+        val stateServers = viewModelServers.state.value
 
         if (showDialogAdd) {
             AddServerDialog(
                 onAddServer = {
-                    viewModel.addServer(it)
-                },
-                onGetLocation = {
-                    viewModel.getCountry(it)
+                    viewModelServers.addServer(it)
                 },
                 onShowDialog = {
                     showDialogAdd = it
@@ -147,7 +147,7 @@ fun MainScreen() {
             ) {
                 navController.previousBackStackEntry?.savedStateHandle?.get<String>("server")
                     ?.let { key ->
-                        viewModel.selectedServer(key)
+                        viewModelMain.selectedServer(key)
                     }
                 HomeScreen(
                     modifier = Modifier
@@ -156,9 +156,9 @@ fun MainScreen() {
                             top = padding.calculateTopPadding(),
                             bottom = padding.calculateBottomPadding(),
                         ),
-                    state = state,
-                    onStartVpn = viewModel::startVpn,
-                    onStopVpn = viewModel::stopVpn,
+                    state = stateMain,
+                    onStartVpn = viewModelMain::startVpn,
+                    onStopVpn = viewModelMain::stopVpn,
                     onChoiceServer = {
                         navigateToTab(
                             navController = navController,
@@ -170,8 +170,6 @@ fun MainScreen() {
             composable(
                 route = Route.ServersScreen.route,
             ) {
-                val viewModelServers = hiltViewModel<ServersViewModel>()
-                val stateServers = viewModelServers.state.value
                 ServersScreen(
                     modifier = Modifier
                         .fillMaxSize()

@@ -40,4 +40,25 @@ class ServersViewModel @Inject constructor(
             serverUseCases.deleteServer(vpnKey)
         }
     }
+
+    fun addServer(vpnKey: VpnKey) {
+        val ip = parseIPv4Address(vpnKey)
+        viewModelScope.launch {
+            val vpnKeyUpsert = vpnKey.copy(
+                country = ip?.let {
+                    getCountry(ip)
+                } ?: "undefined",
+                name = vpnKey.name?.let {
+                    vpnKey.name
+                } ?: "Server #${_state.value.servers.size + 1}"
+            )
+            serverUseCases.upsertServer(vpnKeyUpsert)
+        }
+    }
+
+    private suspend fun getCountry(ip: String) = serverUseCases.getIpLocation(ip).country
+
+    private fun parseIPv4Address(vpnKey: VpnKey) = vpnKey.key.let {
+        Regex("""(?<=@)\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}""").find(it)?.value
+    }
 }

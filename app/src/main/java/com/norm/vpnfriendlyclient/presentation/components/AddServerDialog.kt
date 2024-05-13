@@ -10,11 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -38,7 +34,7 @@ import com.norm.vpnfriendlyclient.presentation.smale_padding
 @Composable
 fun AddServerDialog(
     onAddServer: (VpnKey) -> Unit,
-    onGetLocation: (String) -> String,
+//    onGetLocation: (String) -> String,
     onShowDialog: (Boolean) -> Unit,
 ) {
     val clipBoardManager = LocalClipboardManager.current
@@ -117,7 +113,8 @@ fun AddServerDialog(
                 },
                 maxLines = 1,
             )
-            Spacer(
+            //Entering the server country
+            /*Spacer(
                 modifier = Modifier
                     .height(smale_padding)
             )
@@ -158,7 +155,7 @@ fun AddServerDialog(
                         contentDescription = "update_location",
                     )
                 }
-            }
+            }*/
             Spacer(
                 modifier = Modifier
                     .height(medium_padding)
@@ -187,8 +184,8 @@ fun AddServerDialog(
                         onAddServer(
                             VpnKey(
                                 key = key,
-                                name = name,
-                                country = country,
+                                name = if (name == "") null else name,
+                                country = if (country == "") null else country,
                             )
                         )
                         onShowDialog(false)
@@ -208,7 +205,6 @@ fun AddServerDialog(
 fun PreviewAddServerDialog() {
     AddServerDialog(
         {},
-        { "" },
-        {}
+        {},
     )
 }
