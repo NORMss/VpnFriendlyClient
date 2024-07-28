@@ -16,6 +16,7 @@ hilt = "2.51.1"
 hiltAndroid = "1.2.0"
 retrofit = "2.11.0"
 room = "2.6.1"
+kotlinxSerializationJson = "1.7.1"
 navigationCompose = "2.8.0-beta06"
 
 
@@ -48,6 +49,7 @@ androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navig
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit2-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

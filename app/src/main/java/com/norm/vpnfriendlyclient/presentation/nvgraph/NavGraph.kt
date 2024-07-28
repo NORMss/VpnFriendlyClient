@@ -6,11 +6,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.norm.vpnfriendlyclient.presentation.mainScreen.MainScreen
-import com.norm.vpnfriendlyclient.presentation.nvgraph.Route.VpnNavigatorScreen
 
 @Composable
 fun NavGraph(
-    startDestination: String,
+    startDestination: Route,
 ) {
     val navController = rememberNavController()
 
@@ -18,12 +17,10 @@ fun NavGraph(
         navController = navController,
         startDestination = startDestination,
     ) {
-        navigation(
-            route = Route.VpnNavigation.route,
-            startDestination = VpnNavigatorScreen.route,
+        navigation<Route.VpnNavigation>(
+            startDestination = Route.VpnNavigatorScreen,
         ) {
-            composable(
-                route = VpnNavigatorScreen.route,
+            composable<Route.VpnNavigatorScreen>(
             ) {
                 MainScreen()
             }

@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             VpnFriendlyClientTheme {
-                val startDestination = Route.VpnNavigation.route
+                val startDestination = Route.VpnNavigation
                 NavGraph(startDestination = startDestination)
             }
         }

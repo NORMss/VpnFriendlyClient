@@ -28,6 +28,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.norm.vpnfriendlyclient.presentation.components.AddServerDialog
 import com.norm.vpnfriendlyclient.presentation.components.BottomNavigationItem
 import com.norm.vpnfriendlyclient.presentation.components.VpnBottomNavigation
@@ -68,9 +69,9 @@ fun MainScreen() {
 
     selectedItem = remember(key1 = backstackState) {
         when (backstackState?.destination?.route) {
-            Route.HomeScreen.route -> 0
-            Route.ServersScreen.route -> 1
-            Route.SettingsScreen.route -> 2
+            Route.HomeScreen.toString() -> 0
+            Route.ServersScreen.toString() -> 1
+            Route.SettingsScreen.toString() -> 2
             else -> 0
         }
     }
@@ -105,17 +106,17 @@ fun MainScreen() {
                     when (index) {
                         0 -> navigateToTab(
                             navController = navController,
-                            route = Route.HomeScreen.route,
+                            route = Route.HomeScreen(""),
                         )
 
                         1 -> navigateToTab(
                             navController = navController,
-                            route = Route.ServersScreen.route,
+                            route = Route.ServersScreen,
                         )
 
                         2 -> navigateToTab(
                             navController = navController,
-                            route = Route.SettingsScreen.route,
+                            route = Route.SettingsScreen,
                         )
                     }
                 }
@@ -140,15 +141,16 @@ fun MainScreen() {
         }
         NavHost(
             navController = navController,
-            startDestination = Route.HomeScreen.route,
+            startDestination = Route.HomeScreen,
         ) {
-            composable(
-                route = Route.HomeScreen.route,
-            ) {
-                navController.previousBackStackEntry?.savedStateHandle?.get<String>("server")
-                    ?.let { key ->
-                        viewModelMain.selectedServer(key)
-                    }
+            composable<Route.HomeScreen> { backStackEntry ->
+//                navController.previousBackStackEntry?.savedStateHandle?.get<String>("server")
+//                    ?.let { key ->
+//                        viewModelMain.selectedServer(key)
+//                    }
+                backStackEntry.toRoute<Route.HomeScreen>().let { homeScreen ->
+                    viewModelMain.selectedServer(homeScreen.key)
+                }
                 HomeScreen(
                     modifier = Modifier
                         .fillMaxSize()
@@ -162,14 +164,12 @@ fun MainScreen() {
                     onChoiceServer = {
                         navigateToTab(
                             navController = navController,
-                            route = Route.ServersScreen.route,
+                            route = Route.ServersScreen,
                         )
                     }
                 )
             }
-            composable(
-                route = Route.ServersScreen.route,
-            ) {
+            composable<Route.ServersScreen> {
                 ServersScreen(
                     modifier = Modifier
                         .fillMaxSize()
@@ -179,9 +179,14 @@ fun MainScreen() {
                         ),
                     servers = stateServers.servers,
                     navigateToServer = { key ->
-                        navigateToServer(
-                            navController = navController,
-                            key = key,
+//                        navigateToServer(
+//                            navController = navController,
+//                            key = key,
+//                        )
+                        navController.navigate(
+                            Route.HomeScreen(
+                                key = key
+                            )
                         )
                     },
                     onEditClick = {
@@ -192,9 +197,7 @@ fun MainScreen() {
                     },
                 )
             }
-            composable(
-                route = Route.SettingsScreen.route,
-            ) {
+            composable<Route.SettingsScreen> {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -214,7 +217,7 @@ fun MainScreen() {
 
 private fun navigateToTab(
     navController: NavController,
-    route: String,
+    route: Route,
 ) {
     navController.navigate(route) {
         navController.graph.startDestinationRoute?.let { homeScreen ->
@@ -227,12 +230,12 @@ private fun navigateToTab(
     }
 }
 
-private fun navigateToServer(
-    navController: NavController,
-    key: String,
-) {
-    navController.currentBackStackEntry?.savedStateHandle?.set("server", key)
-    navController.navigate(
-        route = Route.HomeScreen.route
-    )
-}
+//private fun navigateToServer(
+//    navController: NavController,
+//    key: String,
+//) {
+//    navController.currentBackStackEntry?.savedStateHandle?.set("server", key)
+//    navController.navigate(
+//        route = Route.HomeScreen
+//    )
+//}
