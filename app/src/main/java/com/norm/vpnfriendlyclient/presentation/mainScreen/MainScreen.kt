@@ -141,7 +141,7 @@ fun MainScreen() {
         }
         NavHost(
             navController = navController,
-            startDestination = Route.HomeScreen,
+            startDestination = Route.HomeScreen(""),
         ) {
             composable<Route.HomeScreen> { backStackEntry ->
 //                navController.previousBackStackEntry?.savedStateHandle?.get<String>("server")
