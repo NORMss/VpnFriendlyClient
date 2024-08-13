@@ -1,6 +1,7 @@
 package com.norm.vpnfriendlyclient.presentation.components
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,6 +36,8 @@ fun VpnBottomNavigation(
         modifier = Modifier
             .fillMaxWidth(),
     ) {
+        Log.d("MyLog", "Index selected item: ${selected}")
+
         items.forEachIndexed { index, item ->
             NavigationBarItem(
                 selected = index == selected,

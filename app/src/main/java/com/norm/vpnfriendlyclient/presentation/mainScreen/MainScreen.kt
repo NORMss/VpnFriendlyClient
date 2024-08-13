@@ -1,5 +1,6 @@
 package com.norm.vpnfriendlyclient.presentation.mainScreen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -67,11 +69,15 @@ fun MainScreen() {
         mutableStateOf(false)
     }
 
+    LaunchedEffect(backstackState?.destination?.route) {
+        Log.d("MyLog", backstackState?.destination?.route ?: "null")
+    }
+
     selectedItem = remember(key1 = backstackState) {
         when (backstackState?.destination?.route) {
-            Route.HomeScreen.toString() -> 0
-            Route.ServersScreen.toString() -> 1
-            Route.SettingsScreen.toString() -> 2
+            Route.HomeScreen::class.qualifiedName -> 0
+            Route.ServersScreen::class.qualifiedName -> 1
+            Route.SettingsScreen::class.qualifiedName -> 2
             else -> 0
         }
     }
@@ -106,7 +112,7 @@ fun MainScreen() {
                     when (index) {
                         0 -> navigateToTab(
                             navController = navController,
-                            route = Route.HomeScreen(""),
+                            route = Route.HomeScreen(),
                         )
 
                         1 -> navigateToTab(
@@ -141,7 +147,7 @@ fun MainScreen() {
         }
         NavHost(
             navController = navController,
-            startDestination = Route.HomeScreen(""),
+            startDestination = Route.HomeScreen(),
         ) {
             composable<Route.HomeScreen> { backStackEntry ->
 //                navController.previousBackStackEntry?.savedStateHandle?.get<String>("server")
@@ -149,7 +155,9 @@ fun MainScreen() {
 //                        viewModelMain.selectedServer(key)
 //                    }
                 backStackEntry.toRoute<Route.HomeScreen>().let { homeScreen ->
-                    viewModelMain.selectedServer(homeScreen.key)
+                    homeScreen.key?.let {
+                        viewModelMain.selectedServer(it)
+                    }
                 }
                 HomeScreen(
                     modifier = Modifier
@@ -183,11 +191,23 @@ fun MainScreen() {
 //                            navController = navController,
 //                            key = key,
 //                        )
+//                        navController.navigate(
+//                            Route.HomeScreen(
+//                                key = key
+//                            )
+//                        )
                         navController.navigate(
                             Route.HomeScreen(
                                 key = key
                             )
-                        )
+                        ) {
+                            navController.graph.startDestinationRoute?.let { homeScreen ->
+                                popUpTo(homeScreen) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                            }
+                        }
                     },
                     onEditClick = {
                         viewModelServers.editServer(it)

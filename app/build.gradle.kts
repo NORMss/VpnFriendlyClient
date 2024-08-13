@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.norm.vpnfriendlyclient"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.norm.vpnfriendlyclient"

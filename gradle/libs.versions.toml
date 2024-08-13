@@ -2,7 +2,7 @@
 agp = "8.3.2"
 coilCompose = "2.7.0"
 converterGson = "2.11.0"
-kotlin = "2.0.0"
+kotlin = "2.0.10"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -17,7 +17,7 @@ hiltAndroid = "1.2.0"
 retrofit = "2.11.0"
 room = "2.6.1"
 kotlinxSerializationJson = "1.7.1"
-navigationCompose = "2.8.0-beta06"
+navigationCompose = "2.8.0-beta07"
 
 
 [libraries]
